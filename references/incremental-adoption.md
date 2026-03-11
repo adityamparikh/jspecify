@@ -174,17 +174,19 @@ String name = user.getName();
 ```
 
 ```java
-// BEFORE: guard on injected field
-@Autowired
-private UserRepository userRepository;
+// BEFORE: guard on constructor-injected dependency
+private final UserRepository userRepository;
 
-public void save(User user) {
-    Objects.requireNonNull(userRepository, "userRepository not injected");
-    userRepository.save(user);
+public UserService(UserRepository userRepository) {
+    Objects.requireNonNull(userRepository, "userRepository must not be null");
+    this.userRepository = userRepository;
 }
 
-// KEEP: framework injection happens at runtime, outside NullAway's view
-// requireNonNull here catches misconfiguration early with a clear message
+// KEEP: the constructor is public and may be called from @NullUnmarked or
+// unannotated code (e.g. test harnesses, legacy wiring). The guard catches
+// misconfiguration early with a clear message.
+// Note: prefer constructor injection over @Autowired field injection —
+// constructor injection is explicit, testable, and Spring-recommended.
 ```
 
 ### Handling `@Nullable` parameters with a null check

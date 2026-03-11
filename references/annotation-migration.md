@@ -1,5 +1,10 @@
 # Annotation Migration to JSpecify
 
+> **Version note:** Plugin versions in this file may be out of date. Always verify the latest versions before applying:
+> - OpenRewrite Maven plugin: https://github.com/openrewrite/rewrite-maven-plugin/releases
+> - OpenRewrite Gradle plugin: https://plugins.gradle.org/plugin/org.openrewrite.rewrite
+> - rewrite-migrate-java recipe: https://github.com/openrewrite/rewrite-migrate-java/releases
+
 ## Automated Migration with OpenRewrite (Recommended)
 
 The OpenRewrite `MigrateToJSpecify` recipe handles the majority of annotation migrations automatically: javax, Jakarta, JetBrains, Spring, Micrometer, Micronaut, and OpenRewrite annotations.
@@ -46,7 +51,7 @@ Or as a one-shot without modifying `pom.xml`:
 `build.gradle.kts`:
 ```kotlin
 plugins {
-  id("org.openrewrite.rewrite") version("6.32.0") // check latest at https://docs.openrewrite.org/
+  id("org.openrewrite.rewrite") version("7.28.0") // check latest at https://plugins.gradle.org/plugin/org.openrewrite.rewrite
 }
 
 rewrite {

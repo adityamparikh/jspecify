@@ -1,16 +1,8 @@
----
-name: jspecify
-description: >
-  Onboard Java and Kotlin projects to JSpecify null-safety annotations. Use when the user says
-  "onboard to JSpecify", "add JSpecify", "migrate nullability annotations", "set up NullAway",
-  "enforce null safety with NullAway", or wants to adopt @NullMarked/@Nullable in a Java/Kotlin
-  codebase. Covers: adding the JSpecify dependency (Maven/Gradle), annotating code, migrating
-  from other annotation libraries (JSR-305, JetBrains, Spring, Jakarta, Android, FindBugs,
-  Checker Framework, Eclipse JDT) using OpenRewrite, configuring NullAway + Error Prone
-  enforcement, incremental adoption with @NullUnmarked, and Kotlin interop.
----
-
 # JSpecify Skill
+
+> A [Claude Code](https://claude.ai/claude-code) skill for onboarding Java and Kotlin projects to [JSpecify](https://jspecify.dev) null-safety annotations.
+>
+> **Requires Java 17+.**
 
 ## Core Annotations
 
@@ -112,3 +104,10 @@ This makes Lombok's `@NonNull` parameter checks and generated getter/setter null
 - Generic elements: `List<@Nullable String>` means list elements may be null
 - Do not mix JSpecify with JSR-305 or JetBrains annotations in the same compilation unit — migrate per package
 - `@NullUnmarked` is the escape hatch for incremental adoption, not a permanent state
+
+## References
+
+- [Annotation Migration](references/annotation-migration.md) — OpenRewrite setup and full annotation mapping table
+- [Enforcement](references/enforcement.md) — NullAway + Error Prone Maven/Gradle configuration
+- [Incremental Adoption](references/incremental-adoption.md) — strategies, common errors, and null guard removal
+- [Kotlin Interop](references/kotlin-interop.md) — compiler flags and mixed Java/Kotlin project setup

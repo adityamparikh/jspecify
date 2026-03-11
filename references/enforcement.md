@@ -19,7 +19,7 @@ NullAway is a compile-time null checker built as an Error Prone plugin. With `JS
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-compiler-plugin</artifactId>
-      <version>3.13.0</version>
+      <version>3.15.0</version>
       <configuration>
         <source>17</source>
         <target>17</target>

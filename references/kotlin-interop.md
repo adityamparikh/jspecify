@@ -26,14 +26,7 @@ kotlin {
 }
 ```
 
-Or using the older API:
-```kotlin
-tasks.withType<KotlinCompile>().configureEach {
-  kotlinOptions {
-    freeCompilerArgs += "-Xjspecify-annotations=strict"
-  }
-}
-```
+The `kotlinOptions` DSL is deprecated since Kotlin 1.8 and removed in K2. Use `compilerOptions` above.
 
 ### Maven (Kotlin Maven Plugin)
 
@@ -85,7 +78,7 @@ If using KAPT or KSP for annotation processing, JSpecify annotations are passed 
 
 ### Spring Boot projects (Kotlin)
 
-Spring Boot 3.x+ marks its own APIs with `@NullMarked`. Kotlin code calling Spring APIs will see non-null types by default once `-Xjspecify-annotations=strict` is enabled.
+Spring Boot 4.x (Spring Framework 7.x) marks its own APIs with `@NullMarked`. Kotlin code calling Spring Boot 4.x APIs will see non-null types by default once `-Xjspecify-annotations=strict` is enabled. Spring Boot 3.x uses Spring's own `org.springframework.lang` annotations, which are not JSpecify — those APIs will still appear as platform types.
 
 ```kotlin
 // Before: result is String! (platform type)
@@ -98,7 +91,7 @@ val result: String? = environment.getProperty("key")
 
 ## Gotchas
 
-- **K1 compiler (pre-2.0)**: JSpecify support is experimental. Use `-Xjvm-default=all` and `-Xjspecify-annotations=strict` but expect some gaps.
+- **K1 compiler (pre-2.0)**: K1 reached end-of-life with Kotlin 2.0 (2024). If you are pinned to Kotlin < 2.0, JSpecify support is experimental — expect gaps.
 - **`@NullUnmarked` packages**: Kotlin still sees platform types for Java code in `@NullUnmarked` scope — same behavior as unannotated code.
 - **Collections**: `List<@Nullable String>` in Java maps to `List<String?>` in Kotlin with strict mode. Without strict mode, it maps to `List<String!>`.
 - **Arrays**: `@Nullable String[]` → `Array<String?>?` in Kotlin. The array itself can also be null if the parameter/field is `@Nullable`.
