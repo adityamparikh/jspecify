@@ -21,8 +21,7 @@ NullAway is a compile-time null checker built as an Error Prone plugin. With `JS
       <artifactId>maven-compiler-plugin</artifactId>
       <version>3.15.0</version>
       <configuration>
-        <source>17</source>
-        <target>17</target>
+        <release>17</release>
         <encoding>UTF-8</encoding>
         <compilerArgs>
           <arg>-XDcompilePolicy=simple</arg>
@@ -66,6 +65,7 @@ val errorProneVersion = "2.48.0"
 val nullawayVersion = "0.13.1"
 
 plugins {
+  // merge into your existing plugins {} block
   id("net.ltgt.errorprone") version "5.1.0"
 }
 

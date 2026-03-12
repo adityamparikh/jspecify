@@ -89,6 +89,8 @@ For libraries not covered by OpenRewrite (Android, FindBugs, Checker Framework, 
 | **JSR-305 / javax** | `javax.annotation.Nullable` | `org.jspecify.annotations.Nullable` |
 | **JSR-305 / javax** | `javax.annotation.Nonnull` | _(remove — `@NullMarked` makes non-null the default)_ |
 | **JSR-305 / javax** | `javax.annotation.CheckForNull` | `org.jspecify.annotations.Nullable` |
+| **Jakarta** | `jakarta.annotation.Nullable` | `org.jspecify.annotations.Nullable` _(handled by OpenRewrite)_ |
+| **Jakarta** | `jakarta.annotation.Nonnull` | _(remove inside `@NullMarked`)_ _(handled by OpenRewrite)_ |
 | **JetBrains** | `org.jetbrains.annotations.Nullable` | `org.jspecify.annotations.Nullable` |
 | **JetBrains** | `org.jetbrains.annotations.NotNull` | _(remove inside `@NullMarked`)_ |
 | **Spring** | `org.springframework.lang.Nullable` | `org.jspecify.annotations.Nullable` |

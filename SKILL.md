@@ -101,19 +101,23 @@ Once all target packages are `@NullMarked`, run two checks:
 **Check 1 — no legacy annotations remain:**
 ```bash
 grep -r --include="*.java" \
-  "javax\.annotation\.\(Nullable\|Nonnull\|CheckForNull\)\|org\.jetbrains\.annotations\.\(Nullable\|NotNull\)\|org\.springframework\.lang\.\(Nullable\|NonNull\|NonNullApi\|NonNullFields\)\|androidx\.annotation\.\(Nullable\|NonNull\)\|edu\.umd\.cs\.findbugs\.annotations\.\(Nullable\|NonNull\)\|org\.checkerframework\.checker\.nullness\.qual\.\(Nullable\|NonNull\)\|org\.eclipse\.jdt\.annotation\.\(Nullable\|NonNull\)" \
+  "javax\.annotation\.\(Nullable\|Nonnull\|CheckForNull\)\|jakarta\.annotation\.\(Nullable\|Nonnull\)\|org\.jetbrains\.annotations\.\(Nullable\|NotNull\)\|org\.springframework\.lang\.\(Nullable\|NonNull\|NonNullApi\|NonNullFields\)\|androidx\.annotation\.\(Nullable\|NonNull\)\|edu\.umd\.cs\.findbugs\.annotations\.\(Nullable\|NonNull\)\|org\.checkerframework\.checker\.nullness\.qual\.\(Nullable\|NonNull\)\|org\.eclipse\.jdt\.annotation\.\(Nullable\|NonNull\)" \
   src/
 ```
 This must produce no output. Any remaining hits are unmigrated annotations that JSpecify tools will not understand.
 
-**Check 2 — build passes cleanly with NullAway enforced:**
+**Check 2 — old annotation library dependencies removed from the build:**
+
+Once all packages are migrated, remove the now-unused dependencies from `pom.xml` / `build.gradle.kts` (e.g. `com.google.code.findbugs:jsr305`, `org.jetbrains:annotations`, `org.springframework.lang` if not using Spring, etc.) and confirm the build still compiles.
+
+**Check 3 — build passes cleanly with NullAway enforced:**
 ```bash
 ./mvnw install    # Maven
 ./gradlew build   # Gradle
 ```
 The build must pass. NullAway errors mean there are real nullability violations to fix. A clean build confirms the codebase is null-safe within `@NullMarked` scope.
 
-If using incremental adoption, this check applies per-package: run it after each package moves from `@NullUnmarked` → `@NullMarked` to prevent regression before moving on.
+If using incremental adoption, run checks 1 and 3 after each package moves from `@NullUnmarked` → `@NullMarked` to prevent regression before moving on.
 
 ## Lombok
 
