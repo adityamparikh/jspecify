@@ -8,9 +8,9 @@ NullAway is a compile-time null checker built as an Error Prone plugin. With `JS
 
 ```xml
 <properties>
-  <!-- Check latest: https://github.com/google/error-prone/releases -->
+  <!-- Check latest: https://github.com/google/error-prone/releases (last verified: 2026-03) -->
   <error-prone.version>2.48.0</error-prone.version>
-  <!-- Check latest: https://github.com/uber/NullAway/releases -->
+  <!-- Check latest: https://github.com/uber/NullAway/releases (last verified: 2026-03) -->
   <nullaway.version>0.13.1</nullaway.version>
 </properties>
 
@@ -57,7 +57,7 @@ Replace `com.example` in `AnnotatedPackages` with the root package(s) of the pro
 ```kotlin
 import net.ltgt.gradle.errorprone.CheckSeverity
 
-// Check latest versions at:
+// Check latest versions (last verified: 2026-03):
 // https://github.com/google/error-prone/releases
 // https://github.com/uber/NullAway/releases
 // https://plugins.gradle.org/plugin/net.ltgt.errorprone
@@ -83,7 +83,22 @@ tasks.withType<JavaCompile>().configureEach {
 }
 ```
 
-The `net.ltgt.errorprone` Gradle plugin (v3+) and the Maven compiler plugin (v3.11+) automatically add the necessary JVM module access flags for Error Prone — you do not need to add `--add-exports` to `gradle.properties` or `.mvn/jvm.config` unless you see module access errors.
+**Gradle:** The `net.ltgt.errorprone` Gradle plugin (v3+) automatically adds the necessary `--add-exports` and `--add-opens` JVM flags for Error Prone — no manual configuration needed.
+
+**Maven:** The Maven compiler plugin does _not_ add these flags automatically. On Java 16+, create `.mvn/jvm.config` with the required exports if you see module access errors:
+
+```
+--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
+```
 
 ## Spring Boot 4 projects
 

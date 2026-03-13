@@ -34,12 +34,14 @@ For multi-module Maven/Gradle projects:
 
 ### Strategy C: Blanket `@NullUnmarked` then carve out
 
-1. Add a root `package-info.java` with `@NullMarked` at the top-level package (e.g. `com.example`)
-2. Add `@NullUnmarked` to every sub-package's `package-info.java` (create if missing) — this silences NullAway for all existing code
-3. Configure NullAway's `AnnotatedPackages` to the root package (`com.example`). NullAway scans this tree for `@NullMarked`/`@NullUnmarked` markers; the root `@NullMarked` + sub-package `@NullUnmarked` means it sees everything but reports zero errors initially
-4. Change individual sub-packages from `@NullUnmarked` to `@NullMarked` as they are cleaned up
+**Important:** Java package annotations do _not_ inherit to sub-packages. `@NullMarked` on `com.example` does **not** automatically apply to `com.example.service`. Every package needs its own `package-info.java`.
 
-This lets you enable NullAway globally immediately with zero initial errors.
+1. Create a `package-info.java` with `@NullMarked` in **every** package in the codebase
+2. Immediately add `@NullUnmarked` at the class level in every existing class (or use `@NullUnmarked` at the package level instead of `@NullMarked` for packages not yet ready)
+3. Configure NullAway's `AnnotatedPackages` to the root package (`com.example`). This tells NullAway which package tree to scan — it then respects the per-package/per-class `@NullMarked`/`@NullUnmarked` markers it finds
+4. Change individual packages from `@NullUnmarked` to `@NullMarked` as they are cleaned up
+
+This lets you enable NullAway globally in CI immediately with zero initial errors, since every class starts opted out.
 
 ## Using `@NullUnmarked` at Class Level
 
@@ -215,7 +217,7 @@ public void render(@Nullable String template) {
 
 ### Finding candidates
 
-IntelliJ IDEA (2023.2+) highlights `Objects.requireNonNull` calls where it can prove the argument is already non-null. Use **Analyze > Run Inspection > "Redundant 'Objects.requireNonNull()' call"** to get a list.
+IntelliJ IDEA highlights `Objects.requireNonNull` calls where it can prove the argument is already non-null. Use **Analyze > Run Inspection by Name** and search for inspection ID `RequireNonNull` ("Redundant call to `requireNonNull`", under Java > Probable bugs) to get a list.
 
 No OpenRewrite recipe exists yet for this transformation — manual review per method is currently required.
 

@@ -104,7 +104,7 @@ For libraries not covered by OpenRewrite (Android, FindBugs, Checker Framework, 
 | **Checker Framework** | `org.checkerframework.checker.nullness.qual.NonNull` | _(remove inside `@NullMarked`)_ |
 | **Eclipse JDT** | `org.eclipse.jdt.annotation.Nullable` | `org.jspecify.annotations.Nullable` |
 | **Eclipse JDT** | `org.eclipse.jdt.annotation.NonNull` | _(remove inside `@NullMarked`)_ |
-| **Lombok** | `lombok.NonNull` | _(keep — `lombok.NonNull` generates a **runtime** null check in bytecode; JSpecify `@NullMarked` provides **compile-time** checking only. Removing `lombok.NonNull` loses the runtime guard.)_ |
+| **Lombok** | `lombok.NonNull` | _(keep — `lombok.NonNull` generates a **runtime** null check in bytecode; JSpecify `@NullMarked` provides **compile-time** checking only. Removing `lombok.NonNull` loses the runtime guard. Inside `@NullMarked`, NullAway treats the parameter as non-null and Lombok emits a runtime guard — both layers are active. See the "keep" criteria in [incremental-adoption.md](incremental-adoption.md#removing-redundant-null-guards) — `lombok.NonNull` falls under the public-API/boundary-crossing exception.)_ |
 
 ## Spring-specific notes
 
