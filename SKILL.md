@@ -96,7 +96,7 @@ See [references/kotlin-interop.md](references/kotlin-interop.md) for how JSpecif
 
 ### 9. Verify migration completeness
 
-Once all target packages are `@NullMarked`, run two checks:
+Once all target packages are `@NullMarked`, run these three checks:
 
 **Check 1 — no legacy annotations remain:**
 ```bash

@@ -4,6 +4,18 @@
 >
 > **Requires Java 17+.**
 
+## Install
+
+Clone the skill into your Claude Code skills directory:
+
+```bash
+git clone https://github.com/adityamparikh/jspecify.git ~/.claude/skills/jspecify
+```
+
+Claude Code will pick the skill up automatically on the next session. The skill activates when you say things like "onboard to JSpecify", "set up NullAway", or "migrate nullability annotations" in a Java/Kotlin project.
+
+> Version numbers in the snippets below are illustrative — always verify the latest releases against the upstream sources listed in [CLAUDE.md](CLAUDE.md).
+
 ## Core Annotations
 
 | Annotation | Target | Meaning |
@@ -88,7 +100,7 @@ See [references/kotlin-interop.md](references/kotlin-interop.md) for how JSpecif
 
 ### 9. Verify migration completeness
 
-Once all target packages are `@NullMarked`, run two checks:
+Once all target packages are `@NullMarked`, run these three checks:
 
 **Check 1 — no legacy annotations remain:**
 ```bash
