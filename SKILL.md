@@ -1,16 +1,21 @@
 ---
 name: jspecify
 description: >
-  Onboard Java and Kotlin projects to JSpecify null-safety annotations. Use when the user says
-  "onboard to JSpecify", "add JSpecify", "migrate nullability annotations", "set up NullAway",
-  "enforce null safety with NullAway", or wants to adopt @NullMarked/@Nullable in a Java/Kotlin
-  codebase. Covers: adding the JSpecify dependency (Maven/Gradle), annotating code, migrating
-  from other annotation libraries (JSR-305, JetBrains, Spring, Jakarta, Android, FindBugs,
-  Checker Framework, Eclipse JDT) using OpenRewrite, configuring NullAway + Error Prone
-  enforcement, incremental adoption with @NullUnmarked, and Kotlin interop.
+  Onboards Java and Kotlin projects to JSpecify null-safety annotations
+  (@NullMarked, @NullUnmarked, @Nullable, @NonNull from org.jspecify.annotations).
+  Triggers when the user asks to "onboard to JSpecify", "add JSpecify",
+  "migrate nullability annotations", "set up NullAway", "enforce null safety with
+  NullAway", or wants to adopt @NullMarked in a Java/Kotlin codebase. Covers the
+  JSpecify dependency (Maven/Gradle), package annotation, migration from JSR-305,
+  JetBrains, Spring (org.springframework.lang), Jakarta, Android (androidx),
+  FindBugs/SpotBugs, Checker Framework, and Eclipse JDT annotations via
+  OpenRewrite, NullAway + Error Prone enforcement, incremental adoption with
+  @NullUnmarked, and Kotlin interop. Does NOT trigger for: routine use of
+  existing @Nullable annotations without intent to migrate; Kotlin-only projects
+  relying on native ? / !! null-safety with no Java interop; questions about
+  Checker Framework, JSR-305, or javax.annotation usage that do not mention
+  JSpecify or NullAway; general Java code review unrelated to nullability.
 ---
-
-# JSpecify Skill
 
 ## Core Annotations
 
@@ -96,26 +101,18 @@ See [references/kotlin-interop.md](references/kotlin-interop.md) for how JSpecif
 
 ### 9. Verify migration completeness
 
-Once all target packages are `@NullMarked`, run these three checks:
+Once all target packages are `@NullMarked`, run three checks:
 
-**Check 1 — no legacy annotations remain:**
-```bash
-grep -r --include="*.java" \
-  "javax\.annotation\.\(Nullable\|Nonnull\|CheckForNull\)\|jakarta\.annotation\.\(Nullable\|Nonnull\)\|org\.jetbrains\.annotations\.\(Nullable\|NotNull\)\|org\.springframework\.lang\.\(Nullable\|NonNull\|NonNullApi\|NonNullFields\)\|androidx\.annotation\.\(Nullable\|NonNull\)\|edu\.umd\.cs\.findbugs\.annotations\.\(Nullable\|NonNull\)\|org\.checkerframework\.checker\.nullness\.qual\.\(Nullable\|NonNull\)\|org\.eclipse\.jdt\.annotation\.\(Nullable\|NonNull\)" \
-  src/
-```
-This must produce no output. Any remaining hits are unmigrated annotations that JSpecify tools will not understand.
+**Check 1 — no legacy annotations remain:** run the grep command in the "Verifying Migration Completeness" section of [references/incremental-adoption.md](references/incremental-adoption.md). It must produce no output. Any remaining hits are unmigrated annotations that JSpecify tools will not understand.
 
-**Check 2 — old annotation library dependencies removed from the build:**
-
-Once all packages are migrated, remove the now-unused dependencies from `pom.xml` / `build.gradle.kts` (e.g. `com.google.code.findbugs:jsr305`, `org.jetbrains:annotations`, `org.springframework.lang` if not using Spring, etc.) and confirm the build still compiles.
+**Check 2 — old annotation library dependencies removed from the build:** once all packages are migrated, remove the now-unused dependencies from `pom.xml` / `build.gradle.kts` (e.g. `com.google.code.findbugs:jsr305`, `org.jetbrains:annotations`, `org.springframework.lang` if not using Spring) and confirm the build still compiles.
 
 **Check 3 — build passes cleanly with NullAway enforced:**
 ```bash
 ./mvnw install    # Maven
 ./gradlew build   # Gradle
 ```
-The build must pass. NullAway errors mean there are real nullability violations to fix. A clean build confirms the codebase is null-safe within `@NullMarked` scope.
+NullAway errors mean there are real nullability violations to fix. A clean build confirms the codebase is null-safe within `@NullMarked` scope.
 
 If using incremental adoption, run checks 1 and 3 after each package moves from `@NullUnmarked` → `@NullMarked` to prevent regression before moving on.
 

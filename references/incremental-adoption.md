@@ -221,6 +221,18 @@ IntelliJ IDEA highlights `Objects.requireNonNull` calls where it can prove the a
 
 No OpenRewrite recipe exists yet for this transformation — manual review per method is currently required.
 
+## Verifying Migration Completeness
+
+Once all target packages are `@NullMarked`, run this grep to confirm no legacy nullability annotations remain in `src/`. It must produce no output — any hit is an unmigrated annotation that JSpecify tools will not understand:
+
+```bash
+grep -r --include="*.java" \
+  "javax\.annotation\.\(Nullable\|Nonnull\|CheckForNull\)\|jakarta\.annotation\.\(Nullable\|Nonnull\)\|org\.jetbrains\.annotations\.\(Nullable\|NotNull\)\|org\.springframework\.lang\.\(Nullable\|NonNull\|NonNullApi\|NonNullFields\)\|androidx\.annotation\.\(Nullable\|NonNull\)\|edu\.umd\.cs\.findbugs\.annotations\.\(Nullable\|NonNull\)\|org\.checkerframework\.checker\.nullness\.qual\.\(Nullable\|NonNull\)\|org\.eclipse\.jdt\.annotation\.\(Nullable\|NonNull\)" \
+  src/
+```
+
+For incremental migrations, re-run this check after each package moves from `@NullUnmarked` → `@NullMarked` to catch regressions early. Pair it with a clean `./mvnw install` / `./gradlew build` to confirm NullAway is happy with the newly-marked code.
+
 ## CI Integration
 
 To prevent regression on already-migrated packages, enforce in CI from day one. The build will only fail on `@NullMarked` packages — `@NullUnmarked` packages are silent.
