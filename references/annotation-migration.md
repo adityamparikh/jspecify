@@ -7,7 +7,7 @@
 
 ## Automated Migration with OpenRewrite (Recommended)
 
-The OpenRewrite `MigrateToJSpecify` recipe handles the majority of annotation migrations automatically: javax, Jakarta, JetBrains, Spring, Micrometer, Micronaut, and OpenRewrite annotations.
+The OpenRewrite `MigrateToJSpecify` recipe handles the majority of annotation migrations automatically: javax, Jakarta, JetBrains, Micrometer and Micronaut. **Spring is NOT included** — it is deliberately omitted from the composite recipe for compatibility reasons. Run `org.openrewrite.java.jspecify.MigrateFromSpringFrameworkAnnotations` as a separate step to migrate `org.springframework.lang` annotations.
 
 ### Maven
 
