@@ -2,16 +2,16 @@
 
 NullAway is a compile-time null checker built as an Error Prone plugin. With `JSpecifyMode=true`, it understands `@NullMarked`/`@NullUnmarked` scoping and JSpecify type-use semantics and reports errors only inside `@NullMarked` scope.
 
-**Java 17+ required.** Error Prone 2.30+ requires Java 17 or later to run the annotation processor, even if the project's source/target compatibility is set lower.
+**Java 21+ required to run Error Prone 2.43.0+.** The JDK floor moved from 17 to 21 at 2.43.0. This is a requirement for running the annotation processor itself, independent of the project's source/target compatibility — a JDK-17 build machine will fail even on a Java 17 target.
 
 ## Maven Configuration
 
 ```xml
 <properties>
   <!-- Check latest: https://github.com/google/error-prone/releases (last verified: 2026-03) -->
-  <error-prone.version>2.48.0</error-prone.version>
+  <error-prone.version>2.50.0</error-prone.version>
   <!-- Check latest: https://github.com/uber/NullAway/releases (last verified: 2026-03) -->
-  <nullaway.version>0.13.1</nullaway.version>
+  <nullaway.version>0.13.8</nullaway.version>
 </properties>
 
 <build>
@@ -61,8 +61,8 @@ import net.ltgt.gradle.errorprone.CheckSeverity
 // https://github.com/google/error-prone/releases
 // https://github.com/uber/NullAway/releases
 // https://plugins.gradle.org/plugin/net.ltgt.errorprone
-val errorProneVersion = "2.48.0"
-val nullawayVersion = "0.13.1"
+val errorProneVersion = "2.50.0"
+val nullawayVersion = "0.13.8"
 
 plugins {
   // merge into your existing plugins {} block

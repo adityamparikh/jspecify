@@ -16,8 +16,7 @@ Add the plugin to `pom.xml` (or run from the command line):
 ```xml
 <plugin>
   <groupId>org.openrewrite.maven</groupId>
-  <artifactId>rewrite-maven-plugin</artifactId>
-  <version>6.32.0</version><!-- check latest at https://docs.openrewrite.org/ -->
+  <artifactId>rewrite-maven-plugin</artifactId>  <version>6.32.0</version><!-- check latest at https://docs.openrewrite.org/ -->
   <configuration>
     <activeRecipes>
       <recipe>org.openrewrite.java.jspecify.MigrateToJSpecify</recipe>
@@ -42,7 +41,7 @@ Or as a one-shot without modifying `pom.xml`:
 ```bash
 # Verify latest versions at https://docs.openrewrite.org/ before running
 ./mvnw org.openrewrite.maven:rewrite-maven-plugin:run \
-  -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-migrate-java:3.29.0 \
+  -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-migrate-java:3.41.0 \
   -Drewrite.activeRecipes=org.openrewrite.java.jspecify.MigrateToJSpecify
 ```
 
@@ -51,7 +50,7 @@ Or as a one-shot without modifying `pom.xml`:
 `build.gradle.kts`:
 ```kotlin
 plugins {
-  id("org.openrewrite.rewrite") version("7.28.0") // check latest at https://plugins.gradle.org/plugin/org.openrewrite.rewrite
+  id("org.openrewrite.rewrite") version("7.38.0") // check latest at https://plugins.gradle.org/plugin/org.openrewrite.rewrite
 }
 
 rewrite {
@@ -59,7 +58,7 @@ rewrite {
 }
 
 dependencies {
-  rewrite("org.openrewrite.recipe:rewrite-migrate-java:3.29.0") // check latest at https://docs.openrewrite.org/
+  rewrite("org.openrewrite.recipe:rewrite-migrate-java:3.41.0") // check latest at https://docs.openrewrite.org/
 }
 ```
 
