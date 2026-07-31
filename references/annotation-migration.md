@@ -7,7 +7,30 @@
 
 ## Automated Migration with OpenRewrite (Recommended)
 
-The OpenRewrite `MigrateToJSpecify` recipe handles the majority of annotation migrations automatically: javax, Jakarta, JetBrains, Spring, Micrometer, Micronaut, and OpenRewrite annotations.
+The OpenRewrite `MigrateToJSpecify` recipe handles the majority of annotation migrations automatically. Its `recipeList` is exactly five entries: `MigrateFromJavaxAnnotationApi`, `MigrateFromJakartaAnnotationApi`, `MigrateFromJetbrainsAnnotations`, `MigrateFromMicrometerAnnotations`, `MigrateFromMicronautAnnotations`.
+
+### Spring is excluded on purpose — don't add it back blindly
+
+`org.openrewrite.java.jspecify.MigrateFromSpringFrameworkAnnotations` exists, but it is
+**deliberately kept out of the composite**, and the reason is a runtime hazard rather
+than a packaging detail. From the recipe source:
+
+> Running the following recipe on current versions of Spring can cause Spring to
+> misunderstand a nullable field. For instance, a custom Prometheus scrape endpoint with
+> `@Nullable Set<String> includedNames` will fail if `includedNames` is null and if
+> `@Nullable` is `@org.jspecify.annotations.Nullable`.
+
+So a `MigrateToJSpecify` run leaving your `org.springframework.lang` annotations in place
+is **correct behaviour, not an incomplete migration**.
+
+What to do instead:
+
+- **Prefer leaving them.** Spring Framework 7 / Spring Boot 4 already annotate their own
+  APIs `@NullMarked` with JSpecify, so the ecosystem is converging without your help.
+- **If you must migrate them**, do it deliberately: run the Spring recipe on its own
+  branch, and test the paths where Spring reflects over nullability — Actuator
+  endpoints, `@ConfigurationProperties` binding, and anything with a nullable collection
+  parameter — rather than trusting a green compile.
 
 ### Maven
 
@@ -17,7 +40,7 @@ Add the plugin to `pom.xml` (or run from the command line):
 <plugin>
   <groupId>org.openrewrite.maven</groupId>
   <artifactId>rewrite-maven-plugin</artifactId>
-  <version>6.32.0</version><!-- check latest at https://docs.openrewrite.org/ -->
+  <version>6.45.0</version><!-- check latest at https://docs.openrewrite.org/ -->
   <configuration>
     <activeRecipes>
       <recipe>org.openrewrite.java.jspecify.MigrateToJSpecify</recipe>
@@ -42,7 +65,7 @@ Or as a one-shot without modifying `pom.xml`:
 ```bash
 # Verify latest versions at https://docs.openrewrite.org/ before running
 ./mvnw org.openrewrite.maven:rewrite-maven-plugin:run \
-  -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-migrate-java:3.29.0 \
+  -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-migrate-java:3.41.0 \
   -Drewrite.activeRecipes=org.openrewrite.java.jspecify.MigrateToJSpecify
 ```
 
@@ -51,7 +74,7 @@ Or as a one-shot without modifying `pom.xml`:
 `build.gradle.kts`:
 ```kotlin
 plugins {
-  id("org.openrewrite.rewrite") version("7.28.0") // check latest at https://plugins.gradle.org/plugin/org.openrewrite.rewrite
+  id("org.openrewrite.rewrite") version("7.38.0") // check latest at https://plugins.gradle.org/plugin/org.openrewrite.rewrite
 }
 
 rewrite {
@@ -59,7 +82,7 @@ rewrite {
 }
 
 dependencies {
-  rewrite("org.openrewrite.recipe:rewrite-migrate-java:3.29.0") // check latest at https://docs.openrewrite.org/
+  rewrite("org.openrewrite.recipe:rewrite-migrate-java:3.41.0") // check latest at https://docs.openrewrite.org/
 }
 ```
 

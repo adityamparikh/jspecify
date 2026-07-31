@@ -17,6 +17,14 @@ description: >
   JSpecify or NullAway; general Java code review unrelated to nullability.
 ---
 
+## Currency
+
+**Last verified: 2026-07** (NullAway 0.13.x / Error Prone 2.50.x era). Facts here age. If the answer hinges on a
+version-sensitive fact — a NullAway or Error Prone version, an OpenRewrite recipe's contents, a Kotlin compiler default, a JDK floor — and time has passed
+since the stamp above, spot-check current release notes or the tool's own source
+before asserting it. When current docs disagree with this file, **the docs win**:
+say so and note the line is stale.
+
 ## Core Annotations
 
 | Annotation | Target | Meaning |
@@ -56,7 +64,7 @@ dependencies {
 
 ### 3. Migrate existing annotations with OpenRewrite
 
-Use the OpenRewrite `MigrateToJSpecify` recipe — it handles javax, Jakarta, JetBrains, Spring, Micrometer, Micronaut, and more automatically.
+Use the OpenRewrite `MigrateToJSpecify` recipe — it handles javax, Jakarta, JetBrains, Micrometer and Micronaut automatically. **Spring is deliberately excluded, and you should not simply add it back.** A separate `MigrateFromSpringFrameworkAnnotations` recipe exists, but OpenRewrite keeps it out of the composite because running it against current Spring can make Spring misread a nullable field at runtime — see `references/annotation-migration.md` before touching `org.springframework.lang`.
 
 See [references/annotation-migration.md](references/annotation-migration.md) for Maven/Gradle commands and the full annotation mapping table.
 
