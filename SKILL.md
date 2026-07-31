@@ -64,7 +64,7 @@ dependencies {
 
 ### 3. Migrate existing annotations with OpenRewrite
 
-Use the OpenRewrite `MigrateToJSpecify` recipe — it handles javax, Jakarta, JetBrains, Micrometer and Micronaut automatically. **Spring is deliberately excluded** from the composite recipe (compatibility reasons); run `org.openrewrite.java.jspecify.MigrateFromSpringFrameworkAnnotations` separately for `org.springframework.lang`.
+Use the OpenRewrite `MigrateToJSpecify` recipe — it handles javax, Jakarta, JetBrains, Micrometer and Micronaut automatically. **Spring is deliberately excluded, and you should not simply add it back.** A separate `MigrateFromSpringFrameworkAnnotations` recipe exists, but OpenRewrite keeps it out of the composite because running it against current Spring can make Spring misread a nullable field at runtime — see `references/annotation-migration.md` before touching `org.springframework.lang`.
 
 See [references/annotation-migration.md](references/annotation-migration.md) for Maven/Gradle commands and the full annotation mapping table.
 

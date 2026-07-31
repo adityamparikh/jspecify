@@ -7,7 +7,30 @@
 
 ## Automated Migration with OpenRewrite (Recommended)
 
-The OpenRewrite `MigrateToJSpecify` recipe handles the majority of annotation migrations automatically: javax, Jakarta, JetBrains, Micrometer and Micronaut. **Spring is NOT included** — it is deliberately omitted from the composite recipe for compatibility reasons. Run `org.openrewrite.java.jspecify.MigrateFromSpringFrameworkAnnotations` as a separate step to migrate `org.springframework.lang` annotations.
+The OpenRewrite `MigrateToJSpecify` recipe handles the majority of annotation migrations automatically. Its `recipeList` is exactly five entries: `MigrateFromJavaxAnnotationApi`, `MigrateFromJakartaAnnotationApi`, `MigrateFromJetbrainsAnnotations`, `MigrateFromMicrometerAnnotations`, `MigrateFromMicronautAnnotations`.
+
+### Spring is excluded on purpose — don't add it back blindly
+
+`org.openrewrite.java.jspecify.MigrateFromSpringFrameworkAnnotations` exists, but it is
+**deliberately kept out of the composite**, and the reason is a runtime hazard rather
+than a packaging detail. From the recipe source:
+
+> Running the following recipe on current versions of Spring can cause Spring to
+> misunderstand a nullable field. For instance, a custom Prometheus scrape endpoint with
+> `@Nullable Set<String> includedNames` will fail if `includedNames` is null and if
+> `@Nullable` is `@org.jspecify.annotations.Nullable`.
+
+So a `MigrateToJSpecify` run leaving your `org.springframework.lang` annotations in place
+is **correct behaviour, not an incomplete migration**.
+
+What to do instead:
+
+- **Prefer leaving them.** Spring Framework 7 / Spring Boot 4 already annotate their own
+  APIs `@NullMarked` with JSpecify, so the ecosystem is converging without your help.
+- **If you must migrate them**, do it deliberately: run the Spring recipe on its own
+  branch, and test the paths where Spring reflects over nullability — Actuator
+  endpoints, `@ConfigurationProperties` binding, and anything with a nullable collection
+  parameter — rather than trusting a green compile.
 
 ### Maven
 
