@@ -8,9 +8,9 @@ NullAway is a compile-time null checker built as an Error Prone plugin. With `JS
 
 ```xml
 <properties>
-  <!-- Check latest: https://github.com/google/error-prone/releases (last verified: 2026-03) -->
+  <!-- Check latest: https://github.com/google/error-prone/releases (last verified: 2026-07) -->
   <error-prone.version>2.50.0</error-prone.version>
-  <!-- Check latest: https://github.com/uber/NullAway/releases (last verified: 2026-03) -->
+  <!-- Check latest: https://github.com/uber/NullAway/releases (last verified: 2026-07) -->
   <nullaway.version>0.13.8</nullaway.version>
 </properties>
 
@@ -57,7 +57,7 @@ Replace `com.example` in `AnnotatedPackages` with the root package(s) of the pro
 ```kotlin
 import net.ltgt.gradle.errorprone.CheckSeverity
 
-// Check latest versions (last verified: 2026-03):
+// Check latest versions (last verified: 2026-07):
 // https://github.com/google/error-prone/releases
 // https://github.com/uber/NullAway/releases
 // https://plugins.gradle.org/plugin/net.ltgt.errorprone

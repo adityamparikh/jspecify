@@ -16,7 +16,8 @@ Add the plugin to `pom.xml` (or run from the command line):
 ```xml
 <plugin>
   <groupId>org.openrewrite.maven</groupId>
-  <artifactId>rewrite-maven-plugin</artifactId>  <version>6.32.0</version><!-- check latest at https://docs.openrewrite.org/ -->
+  <artifactId>rewrite-maven-plugin</artifactId>
+  <version>6.45.0</version><!-- check latest at https://docs.openrewrite.org/ -->
   <configuration>
     <activeRecipes>
       <recipe>org.openrewrite.java.jspecify.MigrateToJSpecify</recipe>
